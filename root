@@ -1,0 +1,529 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage[explicit]{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 79, 144} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math 
+\usepackage[
+    pdftitle={Minukuri Risha Reddy CV},
+    pdfauthor={Minukuri Risha Reddy},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+\usepackage[default, type1]{sourcesanspro} 
+
+% Some settings:
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column seperation
+\makeatletter
+\let\ps@customFooterStyle\ps@plain % Copy the plain style to customFooterStyle
+\patchcmd{\ps@customFooterStyle}{\thepage}{
+    \color{gray}\textit{\small \thepage \pageref*{LastPage}}
+}{}{} % replace number by desired string
+\makeatother
+\pagestyle{customFooterStyle}
+
+\titleformat{\section}{
+    % avoid page braking right after the section title
+    \needspace{4\baselineskip}
+    % make the font size of the section title large and color it with the primary color
+    \Large\color{primaryColor}
+}{
+}{
+}{
+    % print bold title, give 0.15 cm space and draw a line of 0.8 pt thickness
+    % from the end of the title to the end of the body
+    \textbf{#1}\hspace{0.15cm}\titlerule[0.8pt]\hspace{-0.1cm}
+}[] % section title formatting
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+% \renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.4 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0.2 cm + 0.00001 cm
+    }{
+        0.2 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{1 cm, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for three column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\color{primaryColor}\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0.2 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+        \small\color{gray}\textit{}\hspace{\widthof{}}
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{}
+
+    \placelastupdatedtext
+    \begin{header}
+        \fontsize{30 pt}{30 pt}
+        \textbf{Minukuri Risha Reddy}
+
+        \vspace{0.3 cm}
+
+        \normalsize
+        \mbox{{\footnotesize\faMapMarker*}\hspace*{0.13cm}Hyderabad}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{mailto:youremail@yourdomain.com}{{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}minukuririshareddy@gmail.com}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{tel:+91-541-999-99-99}{{\footnotesize\faPhone*}\hspace*{0.13cm}8328382486}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://yourwebsite.com/}{{\footnotesize\faLink}\hspace*{0.13cm}MinukuriRishaReddy.com}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{www.linkedin.com/in/rishareddy }{{\footnotesize\faLinkedinIn}\hspace*{0.13cm}rishareddy}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://github.com/MinukuriRishaReddy}{{\footnotesize\faGithub}\hspace*{0.13cm}MinukuriRishaReddy}}%
+        \AND%
+        \kern 0.25cm%
+\mbox{\hrefWithoutArrow{https://www.hackerrank.com/profile/minukuririshare1}{{\footnotesize\faLink}\hspace*{0.13cm}minukuririshare1}}%
+    \end{header}
+
+    \vspace{0.3 cm - 0.3 cm}
+    \section{Education}
+
+
+
+        
+        \begin{threecolentry}{\textbf{BTech}}{
+            2022 – 2026
+        }
+            \textbf{Anuarg Univeristy}, Computer Science
+            \begin{highlights}
+                \item CGPA: 9.12/10 
+                \item \textbf{Coursework:} Computer Organisation Architecture, Operating Systems, Computer Networks , : Data Structures, Algorithms, AI , Machine Learning, SQL
+            \end{highlights}
+        \end{threecolentry}
+
+     \begin{threecolentry}{\textbf{TSBIE         }}{
+            2020 – 2022
+        }
+            \textbf{Narayana Junior College}, MPC
+            \begin{highlights}
+                \item Marks: 941/10 
+
+            \end{highlights}
+        \end{threecolentry}
+
+             \begin{threecolentry}{\textbf{SSC        }}{
+            2020 – 2022
+        }
+            \textbf{Mother's Integral School }
+            \begin{highlights}
+                \item CGPA :9.8/10
+
+            \end{highlights}
+        \end{threecolentry}
+
+    
+    \section{Experience}
+
+
+
+        
+        \begin{twocolentry}{
+\href{https://www.dochub.com/jsfiller-desk13/?flat_pdf_quality=high&requestHash=8d428fb3ce53605fc70f4a0382942b9f91c039fd95ce34184be2eab31c7609e2&projectId=1688938671&PAGE_REARRANGE_V2_MVP=true&richTextFormatting=true&isPageRearrangeV2MVP=true&jsf-page-rearrange-v2=true&jsf-redesign-full=true&act-notary-pro-integration=true&jsf-fake-edit-embedded=true&isSkipEditorLoadFrequency=true&jsf-desktop-ux-for-tablets=false&jsf-probability-70=true&jsf-socket-io=false&routeId=6c63115625751eb4eab65b2849ae379d#27ce229debe1469fb630ed475406695b}{Certificate}
+            Hyderabad
+
+        \textbf{}\textbf{Sep 2023 – }\textbf{}\textbf{March 2024}
+        }
+            \textbf{Newbie Learning}, C mentor
+            \begin{highlights}
+                \item Conducted interactive mentoring sessions on \textbf{C Programming}, focusing on core concepts, algorithms, and problem-solving techniques. 
+                \item Design and evaluate coding exercises to develop and enhance participants' actual skills. 
+                \item Collaborated over curriculum development with others in an effort to make learning engaging to students through the use of interesting learning materials. 
+            \end{highlights}
+        \end{twocolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+         \href{https://www.linkedin.com/feed/update/urn:li:activity:7215687527087656960/}{Certificate}
+            Hyderabad
+
+        June 2024 - july 2024
+        }
+            \textbf{Pantech Solutions}, Python Intern
+            \begin{highlights}
+                \item Built and deployed more than 10 Python projects covering automation, data analytics, and scalable applications. 
+                \item Libraries, such as NumPy, Pandas, and Matplotlib, were also used to deliver data-driven insights and visualization. 
+            \end{highlights}
+        \end{twocolentry}
+
+
+           \section{Projects}
+
+
+        
+        \begin{twocolentry}{
+            \href{https://github.com/MinukuriRishaReddy/CryptoExamShield}{Github}
+        }
+            \textbf{Procto Plus}
+            \begin{highlights}
+                \item Revolutionizing Virtual Assessments with Unmatched Security and Integrity Through Blockchain Innovation.
+                \item Tools Used: Blockchain, Web Development, Smart Contracts
+            \end{highlights}
+        \end{twocolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+            \href{https://minukuririshareddy.github.io/ProctoPlus/}{Github}
+        }
+          
+           \textbf{Web Resume}
+            \begin{highlights}
+                \item LaTeX code snippet that provides a theoretical description of your expertise in web development for your Overleaf resume. 
+                
+                \item Tools Used:Latex 
+            \end{highlights}
+        \end{twocolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+            \href{https://github.com/MinukuriRishaReddy/NexaPay}{Github}
+        }
+            \textbf{NexaPay}
+            \begin{highlights}
+                \item NexaPaay is a  cutting-edge banking application built in Java, designed to provide seamless, secure, and efficient financial management. This project aims to deliver a robust framework for core banking operations while emphasizing scalability, user-friendliness, and enhanced security.
+
+                \item Tools Used: Java
+            \end{highlights}
+        \end{twocolentry}
+
+
+
+
+    \section{Certifications}
+
+
+        
+        \begin{twocolentry}{
+            \href{https://www.credential.net/043662a7-172a-4b07-9dc1-71cdca1039ee#gs.i71m8g#acc.wG5cKln0}{Certificate}
+        }
+            \textbf{Google Play Academy Store Listing Certificate}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+            \href{https://infyspringboard.onwingspan.com/public-assets/infosysheadstart/cert/lex_20858515543254600000_shared/1-71d8a6ce-ce41-4b4b-a14b-fce39e9c14a5.pdf}{Certificate}
+        }
+            \textbf{Angular}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.credly.com/badges/5a85b3cd-819d-4916-9bbe-4bea6ae2db2f/linked_in_profile}{Certificate}
+        }
+            \textbf{Prompt Design in Vertex AI by Google Cloud}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.udemy.com/certificate/UC-cee0b0db-314e-44f8-8373-505f206df87b/}{Certificate}
+        }
+            \textbf{Blockchain A-Z : Build a Blockchain ,  a Crypto + Chatgpt }
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.hackerrank.com/certificates/aa165046f3c5}{Certificate}
+        }
+            \textbf{Java}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.hackerrank.com/certificates/f3432a39caf9}{Certificate}
+        }
+            \textbf{Problem Solving (Basic)- HackerRank}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.hackerrank.com/certificates/7704d8998bf3}{Certificate}
+        }
+            \textbf{Problem solving (Intermediate) - HackerRank}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.hackerrank.com/certificates/beee90221221}{Certificate}
+        }
+            \textbf{CSS (Basic) - HackerRank}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://www.hackerrank.com/certificates/883a6afe8cb9}{Certificate}
+        }
+            \textbf{Python (Basic) - HackerRank}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+        \begin{twocolentry}{
+            \href{https://infyspringboard.onwingspan.com/public-assets/infosysheadstart/cert/lex_auth_0127858770650972161567_shared/1-396cddae-cd24-4f44-bdea-77603365f537.pdf}{Certificate}
+        }
+            \textbf{Design Thinking}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+
+  \begin{twocolentry}{
+            \href{https://infyspringboard.onwingspan.com/public-assets/infosysheadstart/cert/lex_auth_0137390881968701448/1-e005bb95-0908-4a2d-ae19-8bcb26769f91.pdf}{Certificate}
+        }
+            \textbf{Drone}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+
+  \begin{twocolentry}{
+            \href{https://www.linkedin.com/in/rishareddy/recent-activity/images/}{Certificate}
+        }
+            \textbf{Chat GPT & AI tools} 
+        \end{twocolentry}
+        \vspace{0.2 cm}
+
+          \begin{twocolentry}{
+            \href{https://www.credly.com/badges/72c4da7e-9b91-415c-b57c-9ab2538a785c/linked_in_profile}{Certificate}
+        }
+            \textbf{Introduction to CyberSecurity}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+
+          \begin{twocolentry}{
+            \href{https://www.linkedin.com/in/rishareddy/recent-activity/images/}{Certificate}
+        }
+            \textbf{IT Essentials}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+
+         \begin{twocolentry}{
+            \href{https://app.gemoo.com/share/image-annotation/716059011839115264?codeId=PaJo21pBxoo8Z&origin=imageurlgenerator&card=716059009628717056}{Certificate}
+        }
+            \textbf{C - Newbie Learning}
+        \end{twocolentry}
+        \vspace{0.2 cm}
+    
+ 
+
+  \section{Achievements}
+
+
+
+        
+        \begin{onecolentry}
+        \begin{highlights}
+        \item President of \textbf{Blockchain Club}
+        \item Campus Ambassador of Accelchain Company
+        \item Secured 2nd place in the national level hackathon \textbf{TechHack\#3 }organised by Anurag Univeristy
+        \item \textbf{5 }Start Coder in \textbf{HackerRank}
+         \href{https://www.hackerrank.com/profile/minukuririshare1}{Certificate}
+        \item Marketing Team of IUCEE Student chapter of Anurag University (AUISC)
+         \end{highlights}
+        \end{onecolentry}
+
+    
+
+    
+    \section{Skills}
+
+
+
+
+        \begin{onecolentry}
+            \textbf{\textbf{Technical Skills}:} Web/App Development, Computer Networks, Data Structures,Operating Systems
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{Programming Languages}:} C,Python, Java
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{\textbf{Front End Development}}:} HTML,CSS,React js ,Angular,Next.js
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{Back End Development}:} Node.js,Java,SQL
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{Soft Skills}:} Critical Thinking, Problem Solving, Public Speaking, Collaboration
+        \end{onecolentry}
+
+ \section{Personal Details}
+
+
+
+
+        \begin{onecolentry}
+            \textbf{\textbf{Dat of Birth}:} 02/06/2005
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{Father's Name }:} Minukuri Gal Reddy
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+           \textbf{\textbf{Mother's Name }:} Minukuri Roja Reddy
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{Current Address}:} 3-125/82/23,Viveknagar colony, Road Number 1, Hyderabad,Telangana,pincode -500092
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{\textbf{Interests}:} Event Management, Dancing, Drawing
+        \end{onecolentry}
+    \vspace{0.2 cm}
+
+   \begin{onecolentry}
+            \textbf{\textbf{Nationality}:} Indian
+        \end{onecolentry}
+    \vspace{0.2 cm}
+
+       \begin{onecolentry}
+            \textbf{\textbf{Languages Known}:} English(proficient),Telugu(Native),Hindi
+        \end{onecolentry}
+    \vspace{0.2 cm}
+\end{document}
